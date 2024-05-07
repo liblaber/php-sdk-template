@@ -15,5 +15,5 @@ jobs:
       - name: Update Packagist Package
         run: |
           curl -XPOST -H 'content-type:application/json' \
-          "https://packagist.org/api/update-package?username=${{ secrets.PACKAGIST_USERNAME }}&apiToken=${{ secrets.PACKAGIST_API_TOKEN }}" \
-          -d '{"repository":{"url":"${{ github.repository_url }}"}}'
+          "https://packagist.org/api/update-package?username=${{ secrets.PACKAGIST_USERNAME }}&apiToken=${{ secrets.PACKAGIST_TOKEN }}" \
+          -d '{"repository":{"url":"https://github.com/${{ github.repository }}"}}'
