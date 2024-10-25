@@ -1,0 +1,27 @@
+image: curlimages/curl:latest
+
+pipelines:
+  tags:
+    '*':
+      - step:
+          name: Pre-check for Environment Variables
+          script:
+            - echo "Checking if necessary environment variables are defined..."
+            - |
+              if [ -z "$PACKAGIST_USERNAME" ]; then
+                echo "Error: PACKAGIST_USERNAME is not defined"
+                exit 1
+              fi
+              if [ -z "$PACKAGIST_TOKEN" ]; then
+                echo "Error: PACKAGIST_TOKEN is not defined"
+                exit 1
+              fi
+      - step:
+          name: Update Packagist
+          script:
+            - |
+              curl -XPOST -H 'content-type:application/json' \
+              "https://packagist.org/api/update-package?username=${PACKAGIST_USERNAME}&apiToken=${PACKAGIST_TOKEN}" \
+              -d "{\"repository\":{\"url\":\"https://bitbucket.org/${BITBUCKET_REPO_FULL_NAME}\"}}"
+          needs:
+            - step: Pre-check for Environment Variables
